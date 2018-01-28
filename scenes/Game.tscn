@@ -1,0 +1,311 @@
+[gd_scene load_steps=23 format=2]
+
+[ext_resource path="res://scenes/scripts/Game.gd" type="Script" id=1]
+[ext_resource path="res://images/maxresdefault.jpg" type="Texture" id=2]
+[ext_resource path="res://gameobjects/scripts/Grid.gd" type="Script" id=3]
+[ext_resource path="res://gameobjects/Router.tscn" type="PackedScene" id=4]
+[ext_resource path="res://gameobjects/scripts/Objective.gd" type="Script" id=5]
+[ext_resource path="res://images/user.png" type="Texture" id=6]
+[ext_resource path="res://gameobjects/scripts/Virus.gd" type="Script" id=7]
+[ext_resource path="res://images/virus.png" type="Texture" id=8]
+[ext_resource path="res://images/packet_1.png" type="Texture" id=9]
+[ext_resource path="res://images/packet_2.png" type="Texture" id=10]
+[ext_resource path="res://images/target.png" type="Texture" id=11]
+[ext_resource path="res://gameobjects/resources/TheLedDisplaySt.ttf" type="DynamicFontData" id=12]
+[ext_resource path="res://images/lifebar.png" type="Texture" id=13]
+[ext_resource path="res://images/lifebar_fill.png" type="Texture" id=14]
+[ext_resource path="res://sounds/Danimal_Cannon_-_Roots.ogg" type="AudioStream" id=15]
+[ext_resource path="res://gameobjects/scripts/Sounds.gd" type="Script" id=16]
+
+[sub_resource type="Shader" id=5]
+
+code = "shader_type canvas_item;
+
+uniform vec2 center;
+uniform vec2 destiny;
+uniform vec4 color_min = vec4(0,0,0,1);
+uniform vec4 color_max = vec4(1,1,1,1);
+uniform float x_lim = 60;
+uniform float y_lim = 34;
+uniform float x_off = -30;
+uniform float y_off = -17;
+
+void fragment(){
+    float x = UV.x * x_lim + x_off + center.x;
+    float y = UV.y * y_lim + y_off + center.y;
+    float dist = sqrt(pow(destiny.x - x, 2) + pow(destiny.y - y, 2));
+    dist = clamp(dist,0,30);
+    float a = (14.0 + dist * (29.0/30.0)) / 255.0;
+    float b = (81.0 - dist * (49.0/30.0)) / 255.0;
+    float c = (99.0 - dist * (67.0/30.0)) / 255.0;
+    COLOR = vec4(a,b,c,1);
+}"
+
+[sub_resource type="ShaderMaterial" id=6]
+
+render_priority = 0
+shader = SubResource( 5 )
+shader_param/center = null
+shader_param/destiny = null
+shader_param/color_min = null
+shader_param/color_max = null
+shader_param/x_lim = null
+shader_param/y_lim = null
+shader_param/x_off = null
+shader_param/y_off = null
+
+[sub_resource type="SpriteFrames" id=1]
+
+animations = [ {
+"frames": [ ExtResource( 9 ), ExtResource( 10 ) ],
+"loop": true,
+"name": "default",
+"speed": 10.0
+} ]
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="DynamicFont" id=2]
+
+size = 16
+use_mipmaps = false
+use_filter = false
+font_data = ExtResource( 12 )
+_sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
+
+[sub_resource type="DynamicFontData" id=3]
+
+font_path = "res://gameobjects/resources/TheLedDisplaySt.ttf"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="DynamicFont" id=4]
+
+size = 60
+use_mipmaps = false
+use_filter = false
+font_data = SubResource( 3 )
+_sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
+
+[node name="Game" type="Node2D"]
+
+position = Vector2( 512, 300 )
+rotation = -0.785398
+script = ExtResource( 1 )
+_sections_unfolded = [ "Material", "Transform" ]
+
+[node name="Background" type="Sprite" parent="." index="0"]
+
+material = SubResource( 6 )
+rotation = 0.785398
+scale = Vector2( 3, 3 )
+texture = ExtResource( 2 )
+_sections_unfolded = [ "Material", "Transform" ]
+
+[node name="Grid" type="Node2D" parent="." index="1"]
+
+script = ExtResource( 3 )
+_sections_unfolded = [ "Material", "Transform" ]
+
+[node name="SpriteGrid" type="Node2D" parent="Grid" index="0"]
+
+_sections_unfolded = [ "Transform" ]
+
+[node name="Router" parent="Grid" index="1" instance=ExtResource( 4 )]
+
+_sections_unfolded = [ "Material", "Transform" ]
+
+[node name="Objective" type="Node2D" parent="Grid" index="2"]
+
+position = Vector2( 0.707108, -0.707108 )
+script = ExtResource( 5 )
+_sections_unfolded = [ "Transform", "Z Index" ]
+
+[node name="Sprite" type="Sprite" parent="Grid/Objective" index="0"]
+
+rotation = 0.785398
+scale = Vector2( 2, 2 )
+z_index = 3
+z_as_relative = false
+texture = ExtResource( 6 )
+_sections_unfolded = [ "Animation", "Material", "Region", "Transform", "Visibility", "Z Index" ]
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="Grid/Objective/Sprite" index="0"]
+
+rect = Rect2( -10, -10, 20, 20 )
+
+[node name="Virus" type="KinematicBody2D" parent="." index="2"]
+
+position = Vector2( -2.12132, 0.707108 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+script = ExtResource( 7 )
+_sections_unfolded = [ "Material", "Transform", "Visibility" ]
+
+[node name="Camera2D" type="Camera2D" parent="Virus" index="0"]
+
+anchor_mode = 1
+rotating = false
+current = true
+zoom = Vector2( 1, 1 )
+limit_left = -10000000
+limit_top = -10000000
+limit_right = 10000000
+limit_bottom = 10000000
+limit_smoothed = true
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+smoothing_enabled = true
+smoothing_speed = 10.0
+offset_v = 0.0
+offset_h = 0.0
+drag_margin_left = 0.0
+drag_margin_top = 0.0
+drag_margin_right = 0.0
+drag_margin_bottom = 0.0
+editor_draw_screen = true
+editor_draw_limits = false
+editor_draw_drag_margin = false
+_sections_unfolded = [ "Drag Margin", "Limit", "Offset", "Smoothing" ]
+
+[node name="Sprite" type="Sprite" parent="Virus" index="1"]
+
+visible = false
+rotation = 0.785398
+z_index = 4
+texture = ExtResource( 8 )
+_sections_unfolded = [ "Material", "Transform", "Z Index" ]
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Virus" index="2"]
+
+rotation = 0.785398
+scale = Vector2( 1.5, 1.5 )
+z_index = 4
+frames = SubResource( 1 )
+animation = "default"
+frame = 1
+playing = true
+_sections_unfolded = [ "Material", "Transform", "Visibility", "Z Index" ]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Virus" index="3"]
+
+build_mode = 1
+polygon = PoolVector2Array( 1.87073, 24.036, 21.3897, 3.47601, 18.3968, -0.557922, 23.3416, -1.33868, 21.7801, -5.763, 14.1026, -5.37262, 5.25404, -15.002, 5.51428, -22.0288, 2.7816, -22.9397, -0.341431, -17.4744, -2.16322, -22.1589, -24.6751, -1.46881, -23.2437, 4.12665, -1.12216, 25.2071 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Target" type="Sprite" parent="Virus" index="4"]
+
+rotation = 0.785398
+texture = ExtResource( 11 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Label" type="Label" parent="Virus/Target" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = -28.0
+margin_top = 25.0
+margin_right = 33.0
+margin_bottom = 52.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 2 )
+align = 1
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Rect", "custom_fonts" ]
+
+[node name="HUD" type="CanvasLayer" parent="." index="3"]
+
+layer = 1
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+
+[node name="Timer" type="Timer" parent="HUD" index="0"]
+
+process_mode = 1
+wait_time = 6.0
+one_shot = true
+autostart = false
+
+[node name="Timer_label" type="Label" parent="HUD" index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 818.0
+margin_top = 11.0
+margin_right = 1007.0
+margin_bottom = 109.0
+rect_pivot_offset = Vector2( 0, 0 )
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 4 )
+text = "5.00"
+align = 1
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Material", "Visibility", "custom_constants", "custom_fonts", "custom_styles" ]
+
+[node name="LifeBar" type="Sprite" parent="HUD" index="2"]
+
+position = Vector2( 120, 60 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 13 )
+_sections_unfolded = [ "Offset", "Transform" ]
+
+[node name="Fill" type="Sprite" parent="HUD/LifeBar" index="0"]
+
+position = Vector2( 42.5, 9.5 )
+texture = ExtResource( 14 )
+vframes = 26
+frame = 25
+_sections_unfolded = [ "Animation", "Region", "Transform" ]
+
+[node name="Sounds" type="Node" parent="." index="4"]
+
+[node name="Music" type="Node" parent="Sounds" index="0"]
+
+[node name="InGame" type="AudioStreamPlayer" parent="Sounds/Music" index="0"]
+
+stream = ExtResource( 15 )
+volume_db = -10.0
+autoplay = true
+mix_target = 0
+bus = "Master"
+
+[node name="Sounds" type="Node" parent="Sounds" index="1"]
+
+script = ExtResource( 16 )
+
+[node name="Stream1" type="AudioStreamPlayer" parent="Sounds/Sounds" index="0"]
+
+stream = null
+volume_db = 0.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
+[node name="Stream2" type="AudioStreamPlayer" parent="Sounds/Sounds" index="1"]
+
+stream = null
+volume_db = 0.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
+

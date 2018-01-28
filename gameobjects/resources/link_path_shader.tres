@@ -1,0 +1,25 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+
+code = "shader_type canvas_item;
+
+uniform vec4 path_color;
+
+void fragment(){
+    vec4 _color = texture(TEXTURE, UV);
+    
+    if (_color.rgb == vec3(0,0,0)){
+        COLOR = vec4(path_color.rgb, _color.a);
+    }
+    else{
+        COLOR = vec4(0,0,0,0);
+    }
+}"
+
+[resource]
+
+render_priority = 0
+shader = SubResource( 1 )
+shader_param/path_color = null
+

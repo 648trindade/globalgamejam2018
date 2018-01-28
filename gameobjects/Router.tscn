@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://gameobjects/scripts/Router.gd" type="Script" id=1]
+[ext_resource path="res://images/router.png" type="Texture" id=2]
+
+[node name="Router" type="Node2D"]
+
+script = ExtResource( 1 )
+_sections_unfolded = [ "Material" ]
+
+[node name="Paths" type="Node2D" parent="." index="0"]
+
+_sections_unfolded = [ "Material" ]
+
+[node name="Sprite" type="Sprite" parent="." index="1"]
+
+rotation = 0.785398
+scale = Vector2( 2, 2 )
+z_index = 3
+z_as_relative = false
+texture = ExtResource( 2 )
+_sections_unfolded = [ "Material", "Transform", "Z Index" ]
+
+[node name="Forks" type="Node2D" parent="." index="2"]
+
+
