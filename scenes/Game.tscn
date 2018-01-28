@@ -35,9 +35,9 @@ void fragment(){
     float y = UV.y * y_lim + y_off + center.y;
     float dist = sqrt(pow(destiny.x - x, 2) + pow(destiny.y - y, 2));
     dist = clamp(dist,0,30);
-    float a = (14.0 + dist * (29.0/30.0)) / 255.0;
-    float b = (81.0 - dist * (49.0/30.0)) / 255.0;
-    float c = (99.0 - dist * (67.0/30.0)) / 255.0;
+    float a = (14.0 + dist * (29.0/50.0)) / 255.0;
+    float b = (81.0 - dist * (49.0/50.0)) / 255.0;
+    float c = (99.0 - dist * (67.0/50.0)) / 255.0;
     COLOR = vec4(a,b,c,1);
 }"
 
@@ -85,7 +85,7 @@ use_filter = false
 font_data = SubResource( 3 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
-[node name="Game" type="Node2D"]
+[node name="Game" type="Node2D" index="0"]
 
 position = Vector2( 512, 300 )
 rotation = -0.785398

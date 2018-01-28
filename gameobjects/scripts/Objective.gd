@@ -1,7 +1,7 @@
 extends Node2D
 
 onready var grid = get_node("/root/Game/Grid")
-var grid_position = Vector2(30,0)
+var grid_position = Vector2(50,0)
 
 func _ready():
     get_node("../../Virus").connect("new_router", self, "change_origin")

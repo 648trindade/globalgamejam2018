@@ -75,6 +75,7 @@ func create_forks(num_forks):
 
     if objective.is_on_screen():
         print("r",objective.get_node("../..").grid_position)
+        var path_points = calc_path(objective.get_node("../..").grid_position, complexity, num_forks)
         var path = Path.instance()
         path.generate(path_points, num_forks, grid)
         paths.add_child(path)

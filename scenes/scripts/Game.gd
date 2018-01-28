@@ -26,7 +26,7 @@ func timer_out():
     if timer_state == "counting":
         emit_signal("explosion_begins")
         timer_state = "exploding"
-        time_max -= 0.3
+        time_max -= 0.4
         time_max = 1 if time_max < 1 else time_max
         timer_label.text = "!"
         # instance explosion
