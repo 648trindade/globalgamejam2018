@@ -3,7 +3,7 @@
 [ext_resource path="res://scenes/scripts/Start.gd" type="Script" id=1]
 [ext_resource path="res://images/data-rusher-title-screen.png" type="Texture" id=2]
 
-[node name="Start" type="Node2D"]
+[node name="Start" type="Node2D" index="0"]
 
 script = ExtResource( 1 )
 
