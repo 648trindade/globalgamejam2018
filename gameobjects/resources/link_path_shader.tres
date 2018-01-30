@@ -7,10 +7,10 @@ code = "shader_type canvas_item;
 uniform vec4 path_color;
 
 void fragment(){
-    vec4 _color = texture(TEXTURE, UV);
+    vec4 color = texture(TEXTURE, UV);
     
-    if (_color.rgb == vec3(0,0,0)){
-        COLOR = vec4(path_color.rgb, _color.a);
+    if (color.rgb == vec3(0,0,0)){
+        COLOR = vec4(path_color.rgb, color.a);
     }
     else{
         COLOR = vec4(0,0,0,0);
